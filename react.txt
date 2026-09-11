@@ -1,0 +1,6 @@
+1. node_modules: 설치된 라이브러리 모은 폴더
+2. public: img/js/동영상/logo 정적 파일 모은 폴더
+3. src->main.jsx: 리액트 실행 진입점 파일
+4. index.html: 리액트는 SPA(싱글 페이지 어플리케이션)이라서 HTML이 1개
+5. pakage.json: 설치전 라이브러리(의존성) 담고있는 파일
+- 리액트 시작: npm run dev
