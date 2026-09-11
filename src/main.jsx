@@ -7,6 +7,8 @@ const create = createRoot(root);
 
 // [선택] 최초로 화면을 그리기 할 컴포넌트 가져와서 렌더링
 // 1. import 이용해 컴포넌트 가져온다
-import App from './App.jsx'
+// import App from './App.jsx'
 // 2. 가져온 컴포넌트 렌더링하기
-create.render(<App> </App>)
+// create.render(<App> </App>)
+import MyMarkup from "./example/day01/MyMarkup";
+create.render(<MyMarkup></MyMarkup>)
