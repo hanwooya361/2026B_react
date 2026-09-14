@@ -1,6 +1,6 @@
-import FrontComp from "./FrontConp";
+import FrontComp from "./FrontComp";
 import BackComp from "./BackComp";
-export default function Component1(){
+export default function Component1(props){
     return(<>
         <h2>react-modules</h2>
         <ol>
