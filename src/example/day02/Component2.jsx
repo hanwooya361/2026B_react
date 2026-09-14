@@ -39,5 +39,4 @@ export default function Component2(props){
         <h4>상태변수:{array}</h4>
         <button onClick={증가함수3}>버튼3</button>
     </>)
-    
 }
