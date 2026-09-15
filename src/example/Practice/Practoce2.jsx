@@ -30,7 +30,7 @@ export default function Practice2(props){
                         <span>성명: {m.name}</span>
                         <span>연락처: {m.phone}</span>
                         <span>나이: {m.age}</span>
-                        <button onClick={삭제함수}>삭제</button>
+                        <button onClick={()=>{삭제함수(index)}}>삭제</button>
                     </div>
                 </>);
             })
