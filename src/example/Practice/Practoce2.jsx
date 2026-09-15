@@ -15,9 +15,10 @@ export default function Practice2(props){
     // 삭제함수
     const 삭제함수 = (index) => {
         members.splice(index, 1)    // JS에서 특정 인덱스 1개 삭제
-        setMembers([...members])
+        setMembers([...members])    // 랜더링 위한 코드!
     }
     return(<>
+    <h2>전화번호부</h2>
         <input value={name} onChange={(e)=>{setName(e.target.value);}}/>
         <input value={age} onChange={(e)=>{setAge(e.target.value);}}/>
         <input value={phone} onChange={(e)=>{setPhone(e.target.value);}}/>
@@ -30,6 +31,7 @@ export default function Practice2(props){
                         <span>성명: {m.name}</span>
                         <span>연락처: {m.phone}</span>
                         <span>나이: {m.age}</span>
+                        {index}
                         <button onClick={()=>{삭제함수(index)}}>삭제</button>
                     </div>
                 </>);
