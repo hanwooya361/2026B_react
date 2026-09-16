@@ -1,0 +1,48 @@
+* {
+  /* border: 1px solid red; */
+  padding: 0px;
+  margin: 0px;
+}
+
+.wrap {
+  display: flex;
+}
+.Nav {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  height: 100vh;
+  background-color: #343336;
+}
+.Nav > div {
+  margin: 50px 10px 5px 10px;
+  color: #7a7a7a;
+}
+
+.Nav > h2 {
+  color: #fff;
+
+  padding: 10px;
+}
+.Nav > a {
+  text-decoration: none;
+  color: #c0c0c0;
+  margin: 10px;
+}
+
+.bottomNav {
+  color: #c0c0c0;
+  margin-top: 5px;
+  padding: 10px 10px;
+  margin: 10px;
+}
+
+.bottomNav:hover {
+  background-color: rgb(71, 71, 235);
+  margin: 10px;
+  border-radius: 10px;
+}
+
+.Box {
+  margin: 0 auto;
+}
