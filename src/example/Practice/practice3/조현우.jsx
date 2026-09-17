@@ -1,3 +1,21 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+function Content(props){
+  const [myJSON, setMySJON] = useState({ results: [] });
+  const [name , setName] = useState("");
+  const addCategory = async () => {
+    await axios.post("https://discussions-louis-bradley-blue.trycloudflare.com/api/categories",{ name },);
+  };
+  
+  return(<>
+    <tr>
+      <td><input value={name} onChange={(e)=> {setName(e.target.value);}}  placeholder="카테고리명"/></td>
+      <td><button type="button" onClick={addCategory}>등록</button></td>
+    </tr>
+  </>)
+}
+
 export default function Hanwoo(props) {
   return (
     <>
@@ -13,6 +31,7 @@ export default function Hanwoo(props) {
               <td>잘부탁</td>
               <td>잘부탁</td>
             </tr>
+            <Content></Content>
           </tbody>
         </table>
       </div>

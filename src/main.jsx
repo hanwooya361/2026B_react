@@ -47,9 +47,9 @@ const create = createRoot(root);
 //     </BrowserRouter>
 // )
 import { BrowserRouter } from "react-router-dom";
-import ExternalApiAxios from "./example/day05/ExternalApiAxios";
+import App3 from "./example/Practice/practice3/App";
 create.render(
     <BrowserRouter> 
-         <ExternalApiAxios/> 
+         <App3/> 
      </BrowserRouter>
 )
