@@ -38,11 +38,18 @@ const create = createRoot(root);
 // import Practice2 from "./example/Practice/Practoce2";
 // create.render(<Practice2></Practice2>)
 
-import { BrowserRouter } from "react-router-dom";   // 1. 라우터 라이브러리 가져오기
-import App3 from "./example/Practice/practice3/App";
+// import { BrowserRouter } from "react-router-dom";   // 1. 라우터 라이브러리 가져오기
+// import <App></App> from "./example/day05/App";
 // 2. 최초 렌더링 되는 컴포넌트 앞뒤로 라우터컴포넌트 감싼다.
+// create.render(
+//     <BrowserRouter> 
+//         <App3/> 
+//     </BrowserRouter>
+// )
+import { BrowserRouter } from "react-router-dom";
+import ExternalApiAxios from "./example/day05/ExternalApiAxios";
 create.render(
     <BrowserRouter> 
-        <App3/> 
-    </BrowserRouter>
+         <ExternalApiAxios/> 
+     </BrowserRouter>
 )
