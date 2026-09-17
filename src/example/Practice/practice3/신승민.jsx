@@ -11,7 +11,7 @@ function ProductPrint(props) {
 
   const 제품등록 = async () => {
     await axios.post(
-      "https://wellness-exclusion-surfing-advisory.trycloudflare.com",
+      "https://wellness-exclusion-surfing-advisory.trycloudflare.com/api/products",
       { name, price, cno },
     );
   };

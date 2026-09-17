@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 export default function Practice2(props) {
     const [myJSON , setMyJSON] = useState([]);
     useEffect( async function(){
-        const response = await axios.get( "https://wellness-exclusion-surfing-advisory.trycloudflare.com" ); 
+        const response = await axios.get( "https://wellness-exclusion-surfing-advisory.trycloudflare.com/api/categories" ); 
         const data = response.data;
         console.log(data);
         setMyJSON( data ); // 통신 응답결과 상태변수에 대입 --> 렌더링 

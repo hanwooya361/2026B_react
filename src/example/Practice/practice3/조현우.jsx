@@ -5,7 +5,7 @@ function Content(props){
   const [myJSON, setMySJON] = useState({ results: [] });
   const [name , setName] = useState("");
   const addCategory = async () => {
-    await axios.post("https://wellness-exclusion-surfing-advisory.trycloudflare.com",{ name },);
+    await axios.post("https://wellness-exclusion-surfing-advisory.trycloudflare.com/api/categories",{ name },);
   };
   
   return(<>
