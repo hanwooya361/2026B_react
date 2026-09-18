@@ -1,72 +1,54 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function ProductPrint(props) {
-  // 객체 안에 빈배열 속성으로 초기화
-  // API 응답 결과 저장하는 상태/변수
-  const [myJSON, setMySJON] = useState({ results: [] });
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [cno, setCno] = useState("");
+function DataList(props) {
+  const [myJSON, setMyJSON] = useState([]);
+  useEffect(() => {
+    async function Data() {
+      const response = await axios.get("http://localhost:8080/api4");
+      console.log(response.data.data);
+      const data = response.data;
 
-  const 제품등록 = async () => {
-    await axios.post(
-      "https://wellness-exclusion-surfing-advisory.trycloudflare.com/api/products",
-      { name, price, cno },
+      setMyJSON(data.data);
+    }
+    Data();
+  }, []);
+
+  let trTag = myJSON.map((data) => {
+    return (
+      <tr key={data.관리기관명}>
+        <td>{data.관리기관명}</td>
+        <td>{data.관할경찰서명}</td>
+        <td>{data.CCTV설치대수}</td>
+        <td>{data.CCTV설치여부}</td>
+        <td>{data.경도}</td>
+      </tr>
     );
-  };
-
+  });
+  console.log(trTag);
   return (
-    <>
-      <div>
-        <table border="1">
-          <thead>
-            <tr>
-              <th>제품 등록 폼</th>
-            </tr>
-          </thead>
-          <tbody className="sTbody">
-            <tr>
-              <td>
-                <div className="inputWrap">
-                  <input
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
-                    placeholder="제품명 (예: 기계식 키보드)"
-                  />
-                  <input
-                    value={price}
-                    onChange={(e) => {
-                      setPrice(e.target.value);
-                    }}
-                    placeholder="가격 (예: 45000)"
-                  />
-                  <input
-                    value={cno}
-                    onChange={(e) => setCno(e.target.value)}
-                    placeholder="카테고리 번호(cno) (예: 1)"
-                  />
-                  <input
-                    type="submit"
-                    name="submit"
-                    value="등록"
-                    onClick={제품등록}
-                  />
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </>
+    <div>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>관리기관명</th>
+            <th>관할경찰서명</th>
+            <th>CCTV설치대수</th>
+            <th>CCTV설치여부</th>
+            <th>경도</th>
+          </tr>
+        </thead>
+        <tbody>{trTag}</tbody>
+      </table>
+    </div>
   );
 }
+
 export default function Seung(props) {
   return (
     <>
-      <ProductPrint></ProductPrint>
+      <h2>신승민 [성동구 어린이보호구역]</h2>
+      <DataList></DataList>
     </>
   );
 }
