@@ -57,8 +57,8 @@ const create = createRoot(root);
 
 // [day06]
 import { BrowserRouter } from "react-router-dom";
-import './index.css'
-import App from "./example/day06/App";
+import './example/Practice/board/index.css'
+import App from "./example/Practice/board/App";
 create.render(
     <BrowserRouter>
         <App/>

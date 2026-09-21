@@ -36,3 +36,19 @@ export default function UseRefExam2(props){
         </form>
     </>)
 }
+
+/*
+    입력상자내 입력받은 값 제어
+        1. useState
+            const [Title, setTitle] = useState('');
+            <input value={title} onChange={(e)=>{setTitle(e.target.value);}}/>
+
+        2. useRef
+            const titleRef = useRef('');
+            <input ref={titleRef}/>
+        ---------------------------------------------------------------------------
+    const formRef = useRef('');
+    *<form ref={formRef}>
+
+    </form>
+*/
