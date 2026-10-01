@@ -51,6 +51,7 @@ function App() {
     else{setCurrentUser(null);} // 재발급실패
     setLoading(false);
   }
+  
   // 컴포넌트 최초 1회 실행 훅
   useEffect(() => {
     checkAuth();
