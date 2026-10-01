@@ -44,11 +44,12 @@ function App() {
     // axios.post(url,body,{withCredentials: true})
     // axios.get(url, {withCredentials: true})
     const response = await axios.get("http://localhost:8080/api/member/me", {withCredentials: true})
-    if(response.data){setCurrentUser(response.data); return;}
+    if(response.data){setCurrentUser(response.data); setLoading(false); return;}
     // 2. 만약 access 토큰 없어서 내정보 조회 실패시 RFT토큰 재발급
     const response2 = await axios.post("http://localhost:8080/api/member/reissue", {}, {withCredentials: true})
     if(response2.data){setCurrentUser(response2.data);} // 재발급성공
     else{setCurrentUser(null);} // 재발급실패
+    setLoading(false);
   }
   // 컴포넌트 최초 1회 실행 훅
   useEffect(() => {
