@@ -66,5 +66,5 @@ create.render(
 ) */
 
 import { BrowserRouter } from "react-router-dom";
-import App from "./example/day13/App";
-create.render(<BrowserRouter><App/></BrowserRouter>)
+import ChatRoom from "./example/day14/ChatRoom";
+create.render(<ChatRoom/>)
