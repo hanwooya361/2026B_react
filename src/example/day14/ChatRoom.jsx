@@ -1,6 +1,7 @@
 import { Client } from "@stomp/stompjs";
 import { useEffect, useRef, useState } from "react"
 import './ChatRoom.css';
+import Notice from "./Notice";
 // ** 웹소캣/STOMP설치 ** 설치: 
 export default function ChatRoom(props){
 
@@ -122,6 +123,7 @@ export default function ChatRoom(props){
                     </div>
                 </div>
             )}
+            <Notice />
         </div>
     )
 }
