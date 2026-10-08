@@ -1,5 +1,6 @@
 import { Client } from "@stomp/stompjs";
 import { useEffect, useRef, useState } from "react"
+import './ChatRoom.css';
 // ** 웹소캣/STOMP설치 ** 설치: 
 export default function ChatRoom(props){
 
@@ -12,30 +13,9 @@ export default function ChatRoom(props){
     // 지역변수 vs 상태(useState)변수 vs 참조(useRef)변수
     const clientRef = useRef(null); // <---> let 변수명=3; 랜더링되면 초기화됨
 
-    // 컴포넌트 최초 실행시 1번만 실행
+    // 컴포넌트 사망시 stomp 종료
     useEffect(()=>{
-        // const client = new Client({brokerURL: "접속할백엔드브로커주소", onConnect: 접속성공이벤트 })
-        const client = new Client({
-            brokerURL: "ws://localhost:8080/ws-chat", // 스프링의 registerStompEndpoints 정의 주소와 일치
-            // 3. 만약 stomp 접속 성공시 특정 경로 구독
-            onConnect:  () => { // 접속 성공하면 실행되는 이벤트/함수
-                // 특정 경로 구독 신청(구독끼리 채팅) 
-                // client.subscribe("/구독경로", (message)=>{메세지 받았을 때})    // 스프링의 configureMessageBroker 정의 주소와 일치
-                client.subscribe("/sub/chat/room/general", (message)=>{
-                    // 4. 만약 특정 경로의 구독에서 메세지를 받았을 때
-                    // JSON.parse(문자열 -> js객체 변환) vs JSON.stringify(js객체 -> 문자열 변환)
-                    // axios 통신은 JSON이 기본값으로 자동 변환 지원 
-                    messages.push(JSON.parse(message.body));    // message.body 메세지본문
-                    setMessages(messages);  // 랜더링
-                })
-            }
-        })
-        // 5. stomp 실행, client.activate();
-        client.activate();
-        // 6. client 객체 다른 함수(전송함수) 사용하기위해 밖으로 빼기
-        clientRef.current = client;
-        // 7. 만약 컴포넌트 사망, stomp 종료, client.deactivate();
-        return () => {client.deactivate();}
+        return () => { if(clientRef.current) clientRef.current.deactivate(); }
     },[])
 
     // 2. 전송시 백엔드에게 메세지 보내기
@@ -46,20 +26,102 @@ export default function ChatRoom(props){
         // 9. 메세지 전송, client.current({destination: "/발행주소", body: 내용물})
         // 발행주소, 스프링의 configureMessageBroker 정의된 발행주소 + @MessageMapping 정의된 주소
         const info = {  // 스프링의 dto참고해 구성
-            type: 'TALK', roomId: "general", sender: "user", content: message, date: new Date().toISOString()
+            type: 'TALK', roomId, sender, content: message, date: new Date().toLocaleTimeString()
         } 
         clientRef.current.publish({
             destination: "/pub/chat/message",
             body:  JSON.stringify(info) // JSON.stringify(js객체 -> 문자열 변환)
             })
+        setMessage(''); // 입력창 비우기
     }
 
-    return(<>
-        <h3> 채팅방 </h3>
-        {messages.map((msg)=>{
-            <div>{msg.sender} : {msg.content}</div>
-        })}
-        <input value={message} onChange={(e)=>setMessage(e.target.value)}/>
-        <button type="button" onClick={sendMessage}> 전송 </button>
-    </>)
+    const [ isConnected , setIsConnected] = useState( false ); // 방 접속 여부
+    const [ roomId , setRoomId ] = useState(''); // 입력받은 방
+    const [ sender , setSender ] = useState(''); // 접속자(닉네임)
+    
+    // 접속 함수 --> 스프링 브로커 연결 
+    const connect = ()=>{
+        const client = new Client( { 
+            brokerURL : "ws://localhost:8080/ws-chat" , 
+            onConnect : () => { 
+                setIsConnected( true ); // 1. ********* 접속 상태 변경 *******
+                // ********* 2.입력받은 방제목으로 구독 *******
+                client.subscribe( `/sub/chat/room/${ roomId }` , (message)=>{
+                    const msg = JSON.parse( message.body );
+                    setMessages( (prev) => [...prev, msg] ); // 이전 상태 기준으로 추가
+                })
+                // ********** 3. 입장메시지 발행 ********
+                client.publish({
+                    destination : "/pub/chat/message",
+                    body: JSON.stringify( {type:'ENTER', roomId , sender ,
+                         content: '', date: new Date().toLocaleTimeString() })
+                });
+            }
+        }) // client end 
+        client.activate()
+        clientRef.current = client;
+    }
+
+    // 퇴장 함수
+    const disconnect = ()=>{ 
+        // 1. 퇴장 메시지 발행 
+        clientRef.current.publish({
+            destination : "/pub/chat/message", 
+            body: JSON.stringify( {type:'QUIT', roomId , sender ,
+                    content: '', date: new Date().toLocaleTimeString() })
+        })
+        // 2. 소켓 닫기 
+        clientRef.current.deactivate();
+        setIsConnected( false ); setMessages([]); // 상태변수 초기화
+    }
+
+    return (
+        <div>
+            { !isConnected ? (
+                <div>
+                    <input value={ roomId } placeholder="방제목/번호 입력"
+                        onChange={ (e) =>{ setRoomId( e.target.value ) } } />
+                    <input value={ sender } placeholder="채팅 닉네임 입력"
+                        onChange={ (e) =>{ setSender( e.target.value) } } />
+                    <button type="button" onClick={ connect }> 접속 </button>
+                </div>
+            ) : (
+                <div>
+                    <div>
+                        <b> 방제목:{ roomId } / 접속자 : { sender } </b>
+                        <button type="button" onClick={ disconnect }> 퇴장 </button>
+                    </div>
+                    <div>
+                        { messages.map( (msg, index)=>(
+                            <div key={ index }>
+                                { msg.type === 'TALK' ? (
+                                    /* 내가 보낸 메시지 여부 */
+                                    msg.sender === sender ? (
+                                        <div>
+                                            <time>{msg.date} </time>
+                                            <p>{ msg.content} </p>
+                                        </div>
+                                    ) : ( /* 남이 보낸 메시지 */
+                                        <div>
+                                            <small>{ msg.sender} </small>
+                                            <div>
+                                                <span> {msg.content } </span>
+                                                <time> {msg.date }</time>
+                                            </div>
+                                        </div>
+                                    )
+                                ) : (
+                                    <i> { msg.content } </i>
+                                )}
+                            </div>
+                        ) )}
+                    </div>
+                    <div>
+                        <input value={ message } onChange={ (e)=> setMessage(e.target.value )} />
+                        <button type="button" onClick={ sendMessage }> 전송 </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    )
 }
